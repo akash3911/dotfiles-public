@@ -41,7 +41,6 @@ link_file "$DOTFILES_DIR/.scripts" "$HOME/.scripts"
 echo "Installing system dependencies..."
 sudo apt-get update
 sudo apt-get install -y \
-    fish \
     tmux \
     fzf \
     ripgrep \
@@ -64,16 +63,6 @@ if ! command -v nvim &> /dev/null || nvim --version 2>&1 | grep -q "FUSE"; then
     rm -rf squashfs-root nvim-linux-x86_64.appimage
 fi
 
-# Install Lazygit
-echo "Installing Lazygit..."
-if ! command -v lazygit &> /dev/null; then
-    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-    tar xf lazygit.tar.gz lazygit
-    sudo install lazygit /usr/local/bin/
-    rm lazygit.tar.gz lazygit
-fi
-
 # Install Eza
 echo "Installing Eza..."
 if ! command -v eza &> /dev/null; then
@@ -83,14 +72,6 @@ if ! command -v eza &> /dev/null; then
     sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
     sudo apt update
     sudo apt install -y eza
-fi
-
-# Install Fisher and plugins for Fish
-echo "Setting up Fish plugins..."
-if command -v fish &> /dev/null; then
-    fish -c "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher"
-    fish -c "fisher install jethrokuan/z"
-    fish -c "fisher install PatrickF1/fzf.fish"
 fi
 
 # Install Gemini CLI
